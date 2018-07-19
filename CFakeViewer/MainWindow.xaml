@@ -3,10 +3,45 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:gif="http://wpfanimatedgif.codeplex.com"
         xmlns:local="clr-namespace:CFakeViewer"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
+        Title="MainWindow" Height="450" Width="800" KeyDown="KeyboardClick" Loaded="LoadAsync">
+    <Window.Resources>
+        <Style TargetType="Label">
+            <Setter Property="Foreground" Value="White"/>
+        </Style>
+    </Window.Resources>
+    <Grid Background="Black">
+        <Image x:Name="loadingGif" gif:ImageBehavior.AnimatedSource="Resources/loadingGif.gif"  Width="50" Panel.ZIndex="1001" Opacity="0"/>
+        <Image x:Name="imageBox" />
+        <Grid x:Name="GridOverlay" Panel.ZIndex="1000" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="300" Height="150" Background="DimGray" Opacity="0.5" Margin="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="20"/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height=".2*"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            <Label Grid.Row="0" Grid.Column="0" Content="⮜-Previous ⮝-Exit ⮞-Next ⮟-Save"/>
+            <Button Click="ColapseClick" Content="[-]" x:Name="colapseButton" VerticalAlignment="Top" HorizontalAlignment="Right" Grid.Row="0" Grid.Column="1"/>
+            <StackPanel Grid.Column="0" Grid.Row="1" Margin="10">
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Name: "/>
+                    <Button x:Name="nameButton"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="Auto-next:"/>
+                    <CheckBox x:Name="autonextCbx" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Label Content="{Binding ElementName=durationSlider, Path=Value, Mode=OneWay}" ContentStringFormat="Duration: [{0}s]" Width="90"/>
+                    <Slider x:Name="durationSlider" Minimum="1" Maximum="15" Width="150" VerticalAlignment="Center" IsSnapToTickEnabled="True" TickFrequency="1"/>
+                </StackPanel>
+                <Button x:Name="fullscreenBtn" Content="Fullscreen" HorizontalAlignment="Left" Click="FullscreenClick"/>
+            </StackPanel>
+        </Grid>
+        <Button x:Name="expandBtn" Content="[+]" HorizontalAlignment="Left" VerticalAlignment="Bottom" Opacity="0" Panel.ZIndex="999" Click="ExpandClick"/>
     </Grid>
 </Window>
